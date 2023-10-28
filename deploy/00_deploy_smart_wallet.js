@@ -55,7 +55,7 @@ module.exports = async function main({ getNamedAccounts, deployments }) {
 
     // Deploying WalletFactory contract
     const WalletFactory = await deploy('WalletFactory', {
-        from: deployer,
+        from: factoryDeployer,
         args: [SmartWallet.address],
         autoMine: true,
         log: true,

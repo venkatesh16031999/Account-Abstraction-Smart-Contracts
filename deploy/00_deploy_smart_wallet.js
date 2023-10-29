@@ -168,22 +168,22 @@ module.exports = async function main({ getNamedAccounts, deployments }) {
     //     .estimateGas([MockERC20.address, MockERC20.address], [0, 0], [approveCalldata, sendCalldata]);
 
     // Creating the base user operation
-    const baseUserOp = {
+    const approveAndTransferUserOp = {
         sender: computedWalletAddress,
         nonce: await smartWalletProxy.nonce(0),
         initCode: "0x",
         callData: userOpCalldata,
         callGasLimit: 91252n, // calculated using the above gas estimation function. 
-        verificationGasLimit: 150000n,
+        verificationGasLimit: 150000n, // minimum verification gas limit
         preVerificationGas: 50000,
         maxFeePerGas: networkFees.maxFeePerGas,
         maxPriorityFeePerGas: networkFees.maxPriorityFeePerGas,
-        paymasterAndData: "0x",
+        paymasterAndData: "0x", // No paymaster is used, gas is paid by smart wallet
         signature: "0x",
     }
 
     // Getting the user operation hash
-    const userOpHash = await entryPoint.getUserOpHash(baseUserOp);
+    const userOpHash = await entryPoint.getUserOpHash(approveAndTransferUserOp);
 
     // Converting the user operation hash to bytes
     const userOpHashBytes = ethers.getBytes(userOpHash);
@@ -192,13 +192,13 @@ module.exports = async function main({ getNamedAccounts, deployments }) {
     const signature = await deployerSigner.signMessage(userOpHashBytes);
 
     // Adding the signature to the base user operation
-    baseUserOp.signature = signature;
+    approveAndTransferUserOp.signature = signature;
 
     // Executing the user operations
     const entryPointExecuteBatchtx = await entryPoint.handleOps(
-        [baseUserOp],
-        deployer,
-        { gasLimit: 15000000 }
+        [approveAndTransferUserOp],
+        deployer, // Remaining unused gas will be refunded to this address
+        { gasLimit: 20000000 }
     );
 
     // Waiting for the transaction to be mined

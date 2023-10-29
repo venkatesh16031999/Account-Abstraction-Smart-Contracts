@@ -36,3 +36,10 @@ The deployment files handle the deployment of the smart wallet contract to the E
 
 Please refer to the individual files for more detailed comments on the code.
 
+## Account Abstraction and Entry Point Contract Flow:
+
+
+![alt Account Abstraction Architecture](https://github.com/venkatesh16031999/Blockchain/blob/erc4337/account-abstraction/EntryPointContract.png)
+
+
+

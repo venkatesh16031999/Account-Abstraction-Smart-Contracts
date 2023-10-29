@@ -1,16 +1,24 @@
-# Smart Wallet Contract and Deployment
+# Account Abstraction and Smart Contract Wallets
 
-This repository contains the smart contract and deployment files for a smart wallet.
+This repository contains all the smart contracts that is required for the Account Abstraction (ERC4337) stack and deployment files from setting up the entry point + smart contract wallet contracts to executing user operations.
 
 ## Contract Files
 
-The contract files define the logic for the smart wallet. They include functions for managing the wallet's funds, authorizing transactions, and interacting with other contracts.
+What are the different contracts included in this repository
+1. Entry Point Core contracts - The main/core contracts for the Account Abstraction feature.
+2. Smart Wallet Contract - A smart contract wallet to manage funds, authorize access and execute other transactions.
+3. Wallet Proxy Contract - A proxy contract which delegates the calls from proxy to implementation smart contract wallets.
+4. Wallet Factory - This contract is primarily used by the entry point contract to deploy a smart wallet for users. Create2 deterministic deployment approach is used here
+5. Modules Management Contract - This contract is primailry used as a module registry contract to enable, disable and setup different modules for our smart wallet.
+6. ECDSAAuthorization Contract - This is an contract which is used an a Auth module for our smart wallets. This manages the ownership of smart wallets for EOA accounts
+
+These are the primary contract which facilitates the Account Abstraction feature. There are few other utility contracts to help other contracts.
 
 ## Deployment Files
 
 The deployment files handle the deployment of the smart wallet contract to the EVM Chain. They include scripts for deploying the contract, verifying the contract on Etherscan, and interacting with the deployed contract.
 
-## Deployment and Interaction sequence
+### Deployment and interaction sequence
 
 1. Deploy the entry point Contract which is an main core contract of Account abstraction
 2. Deploy the smart account implementation Contract which is a smart wallet account generated for every EOA account
@@ -25,10 +33,6 @@ The deployment files handle the deployment of the smart wallet contract to the E
 11. Execute the user operation by calling the handleOps function from entry point contract.
 12. The user operation is a batch execution of approve and transfer, hence these two actions will be performed in a single transaction
 13. Check the updated balance of EOA account and Smart account
-
-### `00_deploy_smart_wallet.js`
-
-This file handles the deployment of the smart wallet contract. It imports the necessary modules, gets the named accounts for the deployer and factory deployer, and deploys the EntryPoint contract. It also logs the smart wallet EOA owner in the auth module and tags the module for deployment.
 
 Please refer to the individual files for more detailed comments on the code.
 
